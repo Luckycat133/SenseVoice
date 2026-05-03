@@ -18,8 +18,8 @@ from utils.ctc_alignment import ctc_forced_align
 class SinusoidalPositionEncoder(torch.nn.Module):
     """ """
 
-    def __int__(self, d_model=80, dropout_rate=0.1):
-        pass
+    def __init__(self, d_model=80, dropout_rate=0.1):
+        super(SinusoidalPositionEncoder, self).__init__()
 
     def encode(
         self, positions: torch.Tensor = None, depth: int = None, dtype: torch.dtype = torch.float32
@@ -31,7 +31,7 @@ class SinusoidalPositionEncoder(torch.nn.Module):
             depth / 2 - 1
         )
         inv_timescales = torch.exp(
-            torch.arange(depth / 2, device=device).type(dtype) * (-log_timescale_increment)
+            torch.arange(depth // 2, device=device).type(dtype) * (-log_timescale_increment)
         )
         inv_timescales = torch.reshape(inv_timescales, [batch_size, -1])
         scaled_time = torch.reshape(positions, [1, -1, 1]) * torch.reshape(
